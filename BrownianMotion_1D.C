@@ -26,7 +26,7 @@
 using namespace std;
 
 //
-TTimer *timep;
+TTimer *timer;
 TCanvas *c1;
 TRandom3 *r1;
 TMultiGraph *mg;
@@ -58,7 +58,7 @@ void control(){
 
   r1->SetSeed(0);
 
-  timep->TurnOn();
+  timer->TurnOn();
 
   for(Int_t i=1;i<=N;i++){
     x=a*r1->Uniform(-2,2);
@@ -68,7 +68,7 @@ void control(){
     gr1->SetPoint(i+1,i+1,xf);
     gr2->SetPoint(i+1,i+1,xf2);
   }
-  timep->TurnOff();
+  timer->TurnOff();
   rprom = rprom + xf;
   rprom2 = rprom2 + (xf*xf);
   if(xf>rmax){rmax=xf;}//Limits to Histogram
@@ -85,9 +85,8 @@ void BrownianMotion_1D(){
 
   r1 = new TRandom3;
 
-  timep= new TTimer(0.1);
-  timep->Connect("Timeout()","BrownianMotion_1D","","control()");
-
+  timer= new TTimer(0.1);
+  timer->Connect("Timeout()","BrownianMotion_1D",0,"control()");
 
   N=10000; //Number of Steps
   Nbins=100000; //Number of Repetitions
