@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
-// NOTICE OF COPYRIGHT                                                   //
+//  NOTICE OF COPYRIGHT                                                   //
 //                                                                       //
 //                Copyright (C) 2015   John Suárez                       //
 //                https://github.com/fnoj/BuffonsNeedle                  //
@@ -19,14 +19,14 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-#include<TRandom.h>
-#include<stdlib>
-#include<stdio>
+#include <TRandom.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 using namespace std;
 
 //
-TTimer *time;
+TTimer *timep;
 TCanvas *c1;
 TRandom3 *r1;
 TMultiGraph *mg;
@@ -58,7 +58,7 @@ void control(){
 
   r1->SetSeed(0);
 
-  time->TurnOn();
+  timep->TurnOn();
 
   for(Int_t i=1;i<=N;i++){
     x=a*r1->Uniform(-2,2);
@@ -68,7 +68,7 @@ void control(){
     gr1->SetPoint(i+1,i+1,xf);
     gr2->SetPoint(i+1,i+1,xf2);
   }
-  time->TurnOff();
+  timep->TurnOff();
   rprom = rprom + xf;
   rprom2 = rprom2 + (xf*xf);
   if(xf>rmax){rmax=xf;}//Limits to Histogram
@@ -85,10 +85,10 @@ void BrownianMotion_1D(){
 
   r1 = new TRandom3;
 
-  time= new TTimer(0.1);
-  time->Connect("Timeout()","BrownianMotion_1D","","control()");
+  timep= new TTimer(0.1);
+  timep->Connect("Timeout()","BrownianMotion_1D","","control()");
 
- 
+
   N=10000; //Number of Steps
   Nbins=100000; //Number of Repetitions
   rprom=0;
@@ -107,7 +107,7 @@ void BrownianMotion_1D(){
   gr1->GetYaxis()->SetTitle("<x*x>");
 
   H1 = new TH1F("Histogram","Brownian Motion",Nbins,-Nbins,Nbins);
-  
+
   for(Int_t k=0;k<=0;k++){
     for(Int_t j=0;j<Nbins;j++){
       control();
@@ -117,9 +117,9 @@ void BrownianMotion_1D(){
     H1->SetAxisRange(rmin,rmax,"X");
     H1->SetXTitle("Final Position(x)");
     H1->SetYTitle("Frequence");
-    
+
     cout <<"N:"<<N<<"\t | \t <R>:"<<rprom/Nbins<<"\t | \t <R²>:"<<rprom2/Nbins<<endl;
-    
+
     c1->cd(1);
     H1->Draw();
 
